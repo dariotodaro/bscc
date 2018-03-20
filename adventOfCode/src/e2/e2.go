@@ -4,18 +4,27 @@ import (
 	"fmt"
 	"os"
 	"strconv"
+	"strings"
 )
 
 func main() {
-	input := os.Args[1]
+	rawInput := os.Args[1]
+	fmt.Printf("rawInput: %v\n\n", rawInput)
+	var inputLines = strings.Split(rawInput, "\n")
+	var input = make([]string, 0)
+	for i := 0; i < len(inputLines); i++ {
+		input = append(input, strings.Split(inputLines[i], " ")...)
+	}
 	var inputLength = len(input)
 	var intArray = make([]int, inputLength)
 	var current int
 	var sum int
+	fmt.Printf("inputlength: %v\n\n", inputLength)
 	for i := 0; i < inputLength; i++ {
-		c, err := strconv.Atoi(string(input[i%inputLength]))
+		fmt.Printf("Try to convert: %v\n", input[i])
+		c, err := strconv.Atoi(string(strings.Trim(input[i%inputLength], "^M\n ")))
 		if err != nil {
-			fmt.Printf("Error in string convertion")
+			fmt.Printf("Error in string convertion\n")
 		} else {
 			intArray[i] = c
 		}
