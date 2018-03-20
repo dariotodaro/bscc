@@ -11,30 +11,35 @@ func main() {
 	rawInput := os.Args[1]
 	fmt.Printf("rawInput: %v\n\n", rawInput)
 	var inputLines = strings.Split(rawInput, "\n")
-	var input = make([]string, 0)
+	var checksum int
 	for i := 0; i < len(inputLines); i++ {
-		input = append(input, strings.Split(inputLines[i], " ")...)
+		var input = strings.Split(inputLines[i], " ")
+		var intArr = stringArrToIntArr(input)
+		var max, min = 0, 100000000
+		for j := 0; j < len(intArr); j++ {
+			var current = intArr[j]
+			if current < min {
+				min = current
+			}
+			if current > max {
+				max = current
+			}
+		}
+		//		fmt.Printf("max: %v, min: %v\n", max, min)
+		checksum += (max - min)
+		max, min = 0, 0
 	}
-	var inputLength = len(input)
-	var intArray = make([]int, inputLength)
-	var current int
-	var sum int
-	fmt.Printf("inputlength: %v\n\n", inputLength)
-	for i := 0; i < inputLength; i++ {
-		fmt.Printf("Try to convert: %v\n", input[i])
-		c, err := strconv.Atoi(string(strings.Trim(input[i%inputLength], "^M\n ")))
+	fmt.Printf("\nChecksum is: %v\n\n", checksum)
+}
+func stringArrToIntArr(input []string) []int {
+	var intArray = make([]int, len(input))
+	for i := 0; i < len(input); i++ {
+		c, err := strconv.Atoi(string(strings.Trim(input[i], "^M\n ")))
 		if err != nil {
 			fmt.Printf("Error in string convertion\n")
 		} else {
 			intArray[i] = c
 		}
 	}
-	for i := 0; i < inputLength; i++ {
-		current = intArray[i]
-		var next = intArray[(i+1)%inputLength]
-		if current == next {
-			sum += next
-		}
-	}
-	fmt.Printf("\nSum is: %v\n\n", sum)
+	return intArray
 }
